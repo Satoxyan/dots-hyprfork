@@ -411,6 +411,19 @@ Singleton {
                 property bool filterDuplicatePlayers: true
             }
 
+            property JsonObject fluid: JsonObject {
+                property int colorMode: 0 // 0: Original | 1: ColorWheel | 2: ImageTexture
+                property real viscosity: 5.0
+                property real noiseMultiplier: 0.45
+                property real timestep: 0.016667
+                property real dissipation: 0.0
+                property int pressureIterations: 19
+                property real lineVariance: 0.55
+                property real lineWidthMultiplier: 1.0
+                property real zoom: 1.6
+                property int msaaSampleCount: 4
+            }
+
             property JsonObject networking: JsonObject {
                 property string userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
             }
