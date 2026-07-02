@@ -12,25 +12,34 @@ Item {
         {"name": Translation.tr("Customize"), "icon": "tune"}
     ]
 
+<<<<<<< HEAD
     // Pomodoro keybinds
+=======
+>>>>>>> pr-3463
     Keys.onPressed: (event) => {
-        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) { // Switch tabs
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageDown) {
                 tabBar.incrementCurrentIndex();
             } else if (event.key === Qt.Key_PageUp) {
                 tabBar.decrementCurrentIndex();
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) { // Pause/resume with Space or S
+        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) {
             if (tabBar.currentIndex === 0) {
                 TimerService.togglePomodoro()
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_R) { // Reset with R
+        } else if (event.key === Qt.Key_R) {
             if (tabBar.currentIndex === 0) {
                 TimerService.resetPomodoro()
             }
             event.accepted = true
+<<<<<<< HEAD
+=======
+        } else if (event.key === Qt.Key_L) {
+            TimerService.stopwatchRecordLap()
+            event.accepted = true
+>>>>>>> pr-3463
         }
     }
 
@@ -51,14 +60,13 @@ Item {
             }
         }
 
-        SwipeView {
+        Item {
             id: swipeView
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
             clip: true
-            currentIndex: tabBar.currentIndex
+            property int currentIndex: tabBar.currentIndex
 
             // Tabs
             PomodoroTimer {}
