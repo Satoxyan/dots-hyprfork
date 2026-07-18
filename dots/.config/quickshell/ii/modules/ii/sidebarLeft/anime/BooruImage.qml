@@ -38,6 +38,9 @@ Button {
         root.sampleDownloaded = false
         root.playOverlayVisible = false
         animatedDownloader.running = false
+        if (root.isAnimated) {
+            cacheChecker.running = true
+        }
     }
 
     onClicked: {
@@ -152,6 +155,22 @@ Button {
         stdout: SplitParser {
             onRead: (line) => {
                 if (line.trim() === "DONE") {
+                    root.sampleDownloaded = true
+                    root.playOverlayVisible = true
+                }
+            }
+        }
+    }
+
+    Process {
+        id: cacheChecker
+        running: false
+        command: ["bash", "-c",
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo CACHED`
+        ]
+        stdout: SplitParser {
+            onRead: (line) => {
+                if (line.trim() === "CACHED") {
                     root.sampleDownloaded = true
                     root.playOverlayVisible = true
                 }
