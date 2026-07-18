@@ -717,7 +717,8 @@ Item {
 
     function clearBooruCache() {
         Quickshell.execDetached(["bash", "-c",
-            `rm -rf '${Directories.booruPreviews}'; mkdir -p '${Directories.booruPreviews}'`
+            `trap '' TERM; pkill -f "curl.*${Directories.booruPreviews}" 2>/dev/null; trap - TERM; ` +
+            `rm -rf '${Directories.booruPreviews}'/*`
         ])
         cacheRefreshTimer.restart()
     }
