@@ -243,20 +243,19 @@ Button {
         Rectangle {
             id: animatedPill
             visible: root.isAnimated
-            anchors.top: parent.top
-            anchors.right: menuButton.left
-            anchors.margins: Math.max(root.imageRadius - menuButton.buttonSize / 2, 8)
-            implicitHeight: menuButton.buttonSize
-            implicitWidth: animatedText.implicitWidth + 10 * 2
+            anchors.top: menuButton.bottom
+            anchors.horizontalCenter: menuButton.horizontalCenter
+            anchors.topMargin: 4
+            width: menuButton.buttonSize
+            height: menuButton.buttonSize
             radius: Appearance.rounding.full
             color: ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
 
-            StyledText {
-                id: animatedText
+            MaterialSymbol {
                 anchors.centerIn: parent
-                font.pixelSize: Appearance.font.pixelSize.small
+                iconSize: Appearance.font.pixelSize.large
                 color: Appearance.m3colors.m3onSurface
-                text: "Animated"
+                text: "slow_motion_video"
             }
         }
 
