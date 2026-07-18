@@ -140,10 +140,10 @@ Button {
         command: ["bash", "-c",
             `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
             `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo DONE || ` +
-            `(curl -s -L --max-time 120 --retry 2 ` +
+            `(curl -s -L -C - --retry 2 ` +
             `${root.refererUrl ? `-H 'Referer: ${root.refererUrl}' ` : ``}` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
-            `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url || root.imageData.file_url)}' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.file_url || root.imageData.sample_url)}' ` +
             `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' && ` +
             `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' | grep -qE '^(image|video)/' && ` +
             `mv '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ` +
