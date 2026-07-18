@@ -30,12 +30,21 @@ Button {
 
     property bool showActions: false
     property bool sampleDownloaded: false
+    property bool playOverlayVisible: false
     readonly property var imageExtensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "svg", "avif"]
     readonly property bool isAnimated: (root.imageData.tags || "").split(" ").includes("animated")
+
+    onImageDataChanged: {
+        root.sampleDownloaded = false
+        root.playOverlayVisible = false
+        animatedDownloader.running = false
+    }
 
     onClicked: {
         if (root.sampleDownloaded) {
             Qt.openUrlExternally("file://" + root.filePath)
+        } else if (root.isAnimated && !animatedDownloader.running) {
+            animatedDownloader.running = true
         } else {
             var src = String(imageObject.source)
             if (src.startsWith("/"))
@@ -49,13 +58,16 @@ Button {
     ImageDownloaderProcess {
         id: imageDownloader
         running: root.refererUrl === ""
-        filePath: root.filePath
-        sourceUrl: root.imageData.sample_url || root.imageData.preview_url || root.imageData.file_url
+        filePath: root.isAnimated ? root.filePath + ".preview" : root.filePath
+        sourceUrl: root.isAnimated ? root.imageData.preview_url : (root.imageData.sample_url || root.imageData.preview_url || root.imageData.file_url)
         onDone: (path, width, height) => {
-            if (root.imageExtensions.includes(root.imageData.file_ext)) {
+            if (root.isAnimated) {
+                imageObject.source = path
+            } else if (root.imageExtensions.includes(root.imageData.file_ext)) {
                 imageObject.source = path
             } else {
                 root.sampleDownloaded = true
+                root.playOverlayVisible = true
             }
             if (!modelData.width || !modelData.height) {
                 modelData.width = width
@@ -85,7 +97,9 @@ Button {
             onRead: (line) => {
                 if (line.trim() === "DONE") {
                     imageObject.source = root.filePath + ".preview"
-                    refererSampleUpgrader.running = true
+                    if (!root.isAnimated) {
+                        refererSampleUpgrader.running = true
+                    }
                 }
             }
         }
@@ -112,7 +126,34 @@ Button {
                         imageObject.source = root.filePath
                     } else {
                         root.sampleDownloaded = true
+                        root.playOverlayVisible = true
                     }
+                }
+            }
+        }
+    }
+
+    // On-demand downloader for animated content (GIF/MP4) — triggered by user click
+    Process {
+        id: animatedDownloader
+        running: false
+        command: ["bash", "-c",
+            `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo DONE || ` +
+            `(curl -s -L --max-time 120 --retry 2 ` +
+            `${root.refererUrl ? `-H 'Referer: ${root.refererUrl}' ` : ``}` +
+            `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url || root.imageData.file_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' && ` +
+            `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' | grep -qE '^(image|video)/' && ` +
+            `mv '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE)`
+        ]
+        stdout: SplitParser {
+            onRead: (line) => {
+                if (line.trim() === "DONE") {
+                    root.sampleDownloaded = true
+                    root.playOverlayVisible = true
                 }
             }
         }
@@ -197,6 +238,46 @@ Button {
                 font.pixelSize: Appearance.font.pixelSize.small
                 color: Appearance.m3colors.m3onSurface
                 text: "Animated"
+            }
+        }
+
+        Rectangle {
+            visible: animatedDownloader.running
+            anchors.centerIn: parent
+            width: 40
+            height: 40
+            radius: width / 2
+            color: ColorUtils.transparentize("#000000", 0.4)
+
+            MaterialSymbol {
+                anchors.centerIn: parent
+                iconSize: 24
+                color: "#ffffff"
+                text: "sync"
+            }
+
+            NumberAnimation on rotation {
+                running: animatedDownloader.running
+                from: 360
+                to: 0
+                duration: 1000
+                loops: Animation.Infinite
+            }
+        }
+
+        Rectangle {
+            visible: root.playOverlayVisible && root.isAnimated
+            anchors.centerIn: parent
+            width: 40
+            height: 40
+            radius: width / 2
+            color: ColorUtils.transparentize("#000000", 0.4)
+
+            MaterialSymbol {
+                anchors.centerIn: parent
+                iconSize: 24
+                color: "#ffffff"
+                text: "play_arrow"
             }
         }
 
