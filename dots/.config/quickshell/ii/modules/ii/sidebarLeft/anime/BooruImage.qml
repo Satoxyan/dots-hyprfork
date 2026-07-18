@@ -31,6 +31,7 @@ Button {
     property bool showActions: false
     property bool sampleDownloaded: false
     property bool playOverlayVisible: false
+    property bool checkingForPlay: false
     readonly property var imageExtensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "svg", "avif"]
     readonly property bool isAnimated: (root.imageData.tags || "").split(" ").includes("animated")
 
@@ -45,7 +46,8 @@ Button {
 
     onClicked: {
         if (root.sampleDownloaded) {
-            Qt.openUrlExternally("file://" + root.filePath)
+            root.checkingForPlay = true
+            cacheChecker.running = true
         } else if (root.isAnimated && !animatedDownloader.running) {
             animatedDownloader.running = true
         } else {
@@ -166,13 +168,24 @@ Button {
         id: cacheChecker
         running: false
         command: ["bash", "-c",
-            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo CACHED`
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo CACHED || echo MISSING`
         ]
         stdout: SplitParser {
             onRead: (line) => {
-                if (line.trim() === "CACHED") {
-                    root.sampleDownloaded = true
-                    root.playOverlayVisible = true
+                var trimmed = line.trim()
+                if (trimmed === "CACHED") {
+                    if (root.checkingForPlay) {
+                        root.checkingForPlay = false
+                        Qt.openUrlExternally("file://" + root.filePath)
+                    } else {
+                        root.sampleDownloaded = true
+                        root.playOverlayVisible = true
+                    }
+                } else if (trimmed === "MISSING" && root.checkingForPlay) {
+                    root.checkingForPlay = false
+                    root.sampleDownloaded = false
+                    root.playOverlayVisible = false
+                    animatedDownloader.running = true
                 }
             }
         }
