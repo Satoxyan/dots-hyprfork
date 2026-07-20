@@ -57,7 +57,6 @@ Item {
             color: Appearance.m3colors.m3outline
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
-            textFormat: Text.RichText
         }
     }
 }
