@@ -364,7 +364,19 @@ MouseArea {
             radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
         }
     }
-    
+
+    LockLyricsOverlay {
+        anchors.centerIn: parent
+        visible: GlobalStates.lyricsActive && root.mediaPlayerAvailable
+        opacity: visible ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.OutCubic
+            }
+        }
+    }
+
     // Main toolbar: password box
     Toolbar {
         id: mainIsland
