@@ -32,6 +32,7 @@ Singleton {
     property bool superReleaseMightTrigger: true
     property bool wallpaperSelectorOpen: false
     property bool workspaceShowNumbers: false
+    property bool lyricsActive: false
 
     onSidebarRightOpenChanged: {
         if (GlobalStates.sidebarRightOpen) {

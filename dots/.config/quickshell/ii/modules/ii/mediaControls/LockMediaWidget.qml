@@ -44,8 +44,8 @@ Item {
     Component.onCompleted: {
         committedCompact = compactMode
         if (compactMode) {
-            playerControl.animScale   = 1.0
-            playerControl.animOpacity = 0.0
+            fullModeGroup.animScale   = 1.0
+            fullModeGroup.animOpacity = 0.0
             compactView.animScale     = 1.0
             compactView.animOpacity   = 1.0
         }
@@ -71,8 +71,8 @@ Item {
     }
 
     // ── Transition animations ────────────────────────────────────────────────
-    // full → compact: playerControl bounces out THEN size shrinks THEN compactView bounces in
-    // compact → full: compactView bounces out THEN size grows THEN playerControl bounces in
+    // full → compact: fullModeGroup bounces out THEN size shrinks THEN compactView bounces in
+    // compact → full: compactView bounces out THEN size grows THEN fullModeGroup bounces in
 
     onCompactModeChanged: {
         if (!initialised) return
@@ -85,18 +85,18 @@ Item {
         }
     }
 
-    // full → compact step 1: playerControl exits, then commits size, then brings in compact
+    // full → compact step 1: fullModeGroup exits, then commits size, then brings in compact
     SequentialAnimation {
         id: toCompactOutAnim
         ParallelAnimation {
             NumberAnimation {
-                target: playerControl; property: "animScale"
+                target: fullModeGroup; property: "animScale"
                 to: 0.85
                 duration: Appearance.animation.elementMoveFast.duration
                 easing.type: Easing.InBack; easing.overshoot: 1.2
             }
             NumberAnimation {
-                target: playerControl; property: "animOpacity"
+                target: fullModeGroup; property: "animOpacity"
                 to: 0.0
                 duration: Appearance.animation.elementMoveFast.duration
                 easing.type: Easing.InCubic
@@ -152,8 +152,8 @@ Item {
         PauseAnimation { duration: 16 }
         ScriptAction {
             script: {
-                playerControl.animScale   = 0.85
-                playerControl.animOpacity = 0.0
+                fullModeGroup.animScale   = 0.85
+                fullModeGroup.animOpacity = 0.0
                 toFullInAnim.restart()
             }
         }
@@ -162,13 +162,13 @@ Item {
     ParallelAnimation {
         id: toFullInAnim
         NumberAnimation {
-            target: playerControl; property: "animScale"
+            target: fullModeGroup; property: "animScale"
             to: 1.0
             duration: Appearance.animation.elementMove.duration * 1.1
             easing.type: Easing.OutBack; easing.overshoot: 1.2
         }
         NumberAnimation {
-            target: playerControl; property: "animOpacity"
+            target: fullModeGroup; property: "animOpacity"
             to: 1.0
             duration: Appearance.animation.elementMoveFast.duration
             easing.type: Easing.OutCubic
@@ -176,15 +176,12 @@ Item {
     }
 
     // ── Full PlayerControl ────────────────────────────────────────────────────
-    PlayerControl {
-        id: playerControl
+    Item {
+        id: fullModeGroup
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        player: root.player
-        visualizerPoints: root.visualizerPoints
-        implicitWidth: root.fullWidth
-        implicitHeight: root.fullHeight
-        radius: root.radius
+        width: root.fullWidth
+        height: root.fullHeight
 
         property real animScale:   1.0
         property real animOpacity: 1.0
@@ -193,61 +190,109 @@ Item {
         opacity: animOpacity
         visible: animOpacity > 0
 
-        // ── Hover overlay on cover art ────────────────────────────────────
-        // Positioned over the art square inside PlayerControl.
-        // The art square sits in a RowLayout with margins=13, spacing=15.
-        // Its width equals its height (square), height = fullHeight - 2*13 margins - 2*elevationMargin.
-        readonly property real artSize: fullHeight
-            - 2 * 13                                        // RowLayout margins
-            - 2 * Appearance.sizes.elevationMargin          // background margins
+        PlayerControl {
+            id: playerControl
+            player: root.player
+            visualizerPoints: root.visualizerPoints
+            implicitWidth: root.fullWidth
+            implicitHeight: root.fullHeight
+            radius: root.radius
 
-        Rectangle {
-            id: coverHoverOverlay
+            // ── Hover overlay on cover art ────────────────────────────────────
+            // Positioned over the art square inside PlayerControl.
+            // The art square sits in a RowLayout with margins=13, spacing=15.
+            // Its width equals its height (square), height = fullHeight - 2*13 margins - 2*elevationMargin.
+            readonly property real artSize: fullHeight
+                - 2 * 13                                        // RowLayout margins
+                - 2 * Appearance.sizes.elevationMargin          // background margins
 
-            // Match art area: left offset = elevationMargin + 13 (RowLayout margin)
-            x: Appearance.sizes.elevationMargin + 13
-            y: Appearance.sizes.elevationMargin + 13
-            width:  playerControl.artSize
-            height: playerControl.artSize
-            radius: Appearance.rounding.verysmall
-
-            color: "transparent"
-
-            // Scrim darkens on hover
             Rectangle {
-                id: scrim
-                anchors.fill: parent
-                radius: parent.radius
-                color: Qt.rgba(0, 0, 0, 0.55)
-                opacity: coverHoverMouse.containsMouse ? 1 : 0
+                id: coverHoverOverlay
 
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMoveFast.duration
-                        easing.type: Easing.OutCubic
+                // Match art area: left offset = elevationMargin + 13 (RowLayout margin)
+                x: Appearance.sizes.elevationMargin + 13
+                y: Appearance.sizes.elevationMargin + 13
+                width:  playerControl.artSize
+                height: playerControl.artSize
+                radius: Appearance.rounding.verysmall
+
+                color: "transparent"
+
+                // Scrim darkens on hover
+                Rectangle {
+                    id: scrim
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: Qt.rgba(0, 0, 0, 0.55)
+                    opacity: coverHoverMouse.containsMouse ? 1 : 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    // Zoom icon centered on scrim
+                    MaterialSymbol {
+                        anchors.centerIn: parent
+                        text: "zoom_in_map"
+                        iconSize: 28
+                        fill: 1
+                        color: "white"
+                        opacity: parent.opacity
                     }
                 }
 
-                // Zoom icon centered on scrim
-                MaterialSymbol {
-                    anchors.centerIn: parent
-                    text: "zoom_in_map"
-                    iconSize: 28
-                    fill: 1
-                    color: "white"
-                    opacity: parent.opacity
+                MouseArea {
+                    id: coverHoverMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    // Prevent click from bubbling to LockSurface (focus steal)
+                    onClicked: {
+                        GlobalStates.lockMediaCompact = true
+                    }
                 }
             }
 
-            MouseArea {
-                id: coverHoverMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                // Prevent click from bubbling to LockSurface (focus steal)
-                onClicked: {
-                    GlobalStates.lockMediaCompact = true
-                }
+        }
+
+        // ── Lyrics toggle button (full mode only) ──────────────────────────────
+        RippleButton {
+            id: lyricsToggleBtn
+            anchors.right: parent.right
+            anchors.rightMargin: 78
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 68
+
+            property real size: 36
+            implicitWidth: size
+            implicitHeight: size
+            buttonRadius: size / 2
+
+            colBackground: GlobalStates.lyricsActive
+                ? (playerControl.blendedColors?.colPrimary ?? Appearance.colors.colPrimary)
+                : ColorUtils.transparentize(
+                    playerControl.blendedColors?.colSecondaryContainer ?? Appearance.colors.colSecondaryContainer, 1)
+            colBackgroundHover: GlobalStates.lyricsActive
+                ? (playerControl.blendedColors?.colPrimaryHover ?? Appearance.colors.colPrimaryHover)
+                : (playerControl.blendedColors?.colSecondaryContainerHover ?? Appearance.colors.colSecondaryContainerHover)
+            colRipple: GlobalStates.lyricsActive
+                ? (playerControl.blendedColors?.colPrimaryActive ?? Appearance.colors.colPrimaryActive)
+                : (playerControl.blendedColors?.colSecondaryContainerActive ?? Appearance.colors.colSecondaryContainerActive)
+
+            onClicked: GlobalStates.lyricsActive = !GlobalStates.lyricsActive
+
+            contentItem: MaterialSymbol {
+                iconSize: Appearance.font.pixelSize.huge
+                fill: GlobalStates.lyricsActive ? 1 : 0
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: GlobalStates.lyricsActive
+                    ? (playerControl.blendedColors?.colOnPrimary ?? Appearance.colors.colOnPrimary)
+                    : (playerControl.blendedColors?.colOnSecondaryContainer ?? Appearance.colors.colOnSecondaryContainer)
+                text: "music_cast"
             }
         }
     }

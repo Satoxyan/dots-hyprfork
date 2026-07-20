@@ -16,6 +16,7 @@ AbstractWidget {
     required property int scaledScreenHeight
     required property real wallpaperScale
     property bool visibleWhenLocked: false
+    property bool hideWhenLyricsActive: false
     property var configEntry: Config.options.background.widgets[configEntryName]
     property string placementStrategy: configEntry.placementStrategy
     property real targetX: Math.max(0, Math.min(configEntry.x, scaledScreenWidth - width))
@@ -23,7 +24,7 @@ AbstractWidget {
     x: targetX
     y: targetY
     visible: opacity > 0
-    opacity: (GlobalStates.screenLocked && !visibleWhenLocked) ? 0 : 1
+    opacity: (GlobalStates.screenLocked && !visibleWhenLocked) || (GlobalStates.lyricsActive && hideWhenLyricsActive) ? 0 : 1
     Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }

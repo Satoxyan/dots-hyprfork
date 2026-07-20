@@ -26,6 +26,7 @@ AbstractBackgroundWidget {
     x: forceCenter ? ((root.screenWidth - root.width) / 2) : targetX
     y: forceCenter ? ((root.screenHeight - root.height) / 2) : targetY
     visibleWhenLocked: true
+    hideWhenLyricsActive: true
 
     readonly property color effectiveColText: {
         if (effectiveColorMode === "light") return Appearance.colors.colPrimary;
