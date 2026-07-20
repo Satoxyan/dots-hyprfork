@@ -2,8 +2,10 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 Singleton {
     id: root
@@ -99,16 +101,58 @@ Singleton {
                     root.lastError = "Parse error: " + e.toString()
                 }
             } else if (xhr.status === 404) {
-                // Search fallback: try without album
                 if (album && root.pendingAlbum) {
                     root.pendingAlbum = ""
                     fetchDebounce.restart()
                     return
                 }
-                root.lastError = "Not found"
+                doSearch(artist, title)
+                return
             } else {
                 root.lastError = "HTTP " + xhr.status
             }
+        }
+
+        xhr.open("GET", url)
+        xhr.setRequestHeader("User-Agent", "IllogicalImpulseShell/1.0")
+        xhr.send()
+    }
+
+    // ── Search fallback ────────────────────────────────────────────────────────
+
+    function doSearch(artist, title) {
+        var query = encodeURIComponent(artist + " " + title)
+        var url = root.apiBaseUrl + "/search?q=" + query
+
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return
+
+            root.fetching = false
+            if (artist !== root.pendingArtist || title !== root.pendingTitle) return
+
+            if (xhr.status === 200) {
+                try {
+                    var results = JSON.parse(xhr.responseText)
+                    if (results.length > 0) {
+                        var match = results[0]
+                        root.currentArtist = match.artistName || artist
+                        root.currentTitle = match.trackName || title
+                        root.currentAlbum = match.albumName || ""
+
+                        if (match.syncedLyrics) {
+                            root.syncedLyrics = parseLRC(match.syncedLyrics)
+                        }
+                        root.plainLyrics = match.plainLyrics || ""
+                        root.available = true
+                        return
+                    }
+                } catch (e) {
+                    root.lastError = "Search parse error"
+                    return
+                }
+            }
+            root.lastError = "Not found"
         }
 
         xhr.open("GET", url)

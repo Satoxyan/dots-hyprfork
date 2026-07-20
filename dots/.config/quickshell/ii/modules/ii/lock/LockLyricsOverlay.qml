@@ -226,9 +226,9 @@ Item {
                     topPadding: 10
                     bottomPadding: 10
 
-                    Repeater {
-                        id: lyricsRepeater
-                        model: Lyrics.syncedLines
+                            Repeater {
+                                id: lyricsRepeater
+                                model: Lyrics.syncedLyrics
 
                         delegate: Item {
                             required property var modelData
@@ -244,14 +244,14 @@ Item {
                                     margins: 8
                                 }
                                 font.pixelSize: Appearance.font.pixelSize.normal
-                                color: {
-                                    if (!Lyrics.hasLyrics) return "transparent"
-                                    if (index === lyricsPanel.currentIndex)
-                                        return blendedColors.colPrimary
-                                    if (modelData.time < (Lyrics.syncedLines[lyricsPanel.currentIndex]?.time ?? 0))
-                                        return ColorUtils.transparentize(blendedColors.colSubtext, 0.4)
-                                    return blendedColors.colOnLayer0
-                                }
+                                    color: {
+                                        if (!Lyrics.available) return "transparent"
+                                        if (index === lyricsPanel.currentIndex)
+                                            return blendedColors.colPrimary
+                                        if (modelData.time < (Lyrics.syncedLyrics[lyricsPanel.currentIndex]?.time ?? 0))
+                                            return ColorUtils.transparentize(blendedColors.colSubtext, 0.4)
+                                        return blendedColors.colOnLayer0
+                                    }
                                 text: modelData.text
                                 wrapMode: Text.Wrap
                                 maximumLineCount: 2
@@ -268,20 +268,20 @@ Item {
                     Item {
                         width: parent.width
                         implicitHeight: emptyText.implicitHeight
-                        visible: !Lyrics.hasLyrics && !Lyrics.loading
+                        visible: !Lyrics.available && !Lyrics.fetching
                         StyledText {
                             id: emptyText
                             anchors.centerIn: parent
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: blendedColors.colSubtext
-                            text: Lyrics.errorMessage.length > 0 ? Lyrics.errorMessage : "No lyrics"
+                            text: Lyrics.lastError.length > 0 ? Lyrics.lastError : "No lyrics"
                         }
                     }
 
                     Item {
                         width: parent.width
                         implicitHeight: loadingText.implicitHeight
-                        visible: Lyrics.loading
+                        visible: Lyrics.fetching
                         StyledText {
                             id: loadingText
                             anchors.centerIn: parent
@@ -323,7 +323,7 @@ Item {
         repeat: true
         running: GlobalStates.lyricsActive && root.player != null
         onTriggered: {
-            if (root.player && Lyrics.syncedLines.length > 0) {
+            if (root.player && Lyrics.syncedLyrics.length > 0) {
                 lyricsPanel.currentIndex = Lyrics.getCurrentLineIndex(root.player.position)
             }
         }
@@ -331,6 +331,8 @@ Item {
 
     // ── Auto-lookup on track change ─────────────────────────────────────
     property string _lastKey: ""
+
+    onVisibleChanged: { if (visible) scheduleLookup() }
 
     onPlayerChanged: { scheduleLookup() }
 
@@ -355,8 +357,7 @@ Item {
             if (root.player) {
                 Lyrics.lookup(
                     root.player.trackArtist || "",
-                    root.player.trackTitle || "",
-                    root.player.length || 0
+                    root.player.trackTitle || ""
                 )
             }
         }
