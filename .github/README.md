@@ -101,10 +101,11 @@ Widget system: Quickshell | Support: Yes
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
  - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey (end-4)
  - [@dxnz-id](https://github.com/dxnz-id) for helping and supporting me with stuff
- - PR and Idea: [@DevanshuDubey](https://github.com/DevanshuDubey), [@kxrur](https://github.com/kxrur), [@fb24m](https://github.com/fb24m), [@ReemX](https://github.com/ReemX), [@GazzD](https://github.com/GazzD), [@ParanoidExtreme](https://github.com/ParanoidExtreme), [@alaotach](https://github.com/alaotach), [@kellyson71](https://github.com/kellyson71), [@2cheikhhachem](https://github.com/cheikhhachem), [@CarlosBranty](https://github.com/CarlosBranty), [@reakjra](https://github.com/reakjra)
  - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan](https://github.com/fufexan/dotfiles)
+ - <sub> PR and Idea: [@DevanshuDubey](https://github.com/DevanshuDubey), [@kxrur](https://github.com/kxrur), [@fb24m](https://github.com/fb24m), [@ReemX](https://github.com/ReemX), [@GazzD](https://github.com/GazzD), [@ParanoidExtreme](https://github.com/ParanoidExtreme), [@alaotach](https://github.com/alaotach), [@kellyson71](https://github.com/kellyson71), [@2cheikhhachem](https://github.com/cheikhhachem), [@CarlosBranty](https://github.com/CarlosBranty), [@reakjra](https://github.com/reakjra)
+</sub>
 
 ---
 
