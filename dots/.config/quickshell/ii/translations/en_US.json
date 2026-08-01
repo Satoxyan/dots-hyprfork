@@ -351,6 +351,7 @@
   "Allows you to open sidebars by clicking or hovering screen corners regardless of bar position": "Allows you to open sidebars by clicking or hovering screen corners regardless of bar position",
   "Bar style": "Bar style",
   "Load:": "Load:",
+  "Temperature:": "Temperature:",
   "Open file link": "Open file link",
   "Ignored if terminal theming is not enabled": "Ignored if terminal theming is not enabled",
   "Shutdown": "Shutdown",

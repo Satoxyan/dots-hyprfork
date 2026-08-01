@@ -20,6 +20,7 @@ Singleton {
 	property real swapUsed: swapTotal - swapFree
     property real swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property real cpuUsage: 0
+    property real cpuTemperature: -1
     property var previousCpuStats
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
@@ -112,6 +113,42 @@ Singleton {
             id: outputCollector
             onStreamFinished: {
                 root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz"
+            }
+        }
+    }
+
+    Timer {
+        interval: Config.options.resources.updateInterval
+        running: Config.ready
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            cpuTempProc.running = true
+        }
+    }
+
+    Process {
+        id: cpuTempProc
+        running: false
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        command: ["bash", "-c", `
+            val=$(sensors -j 2>/dev/null | sed -n 's/.*"Package id 0":{"temp1_input":\\([0-9.]*\\).*/\\1/p')
+            if [ -n "$val" ]; then echo "$val"; exit 0; fi
+            for p in x86_pkg_temp TCPU acpitz; do
+                for z in /sys/class/thermal/thermal_zone*; do
+                    [ "$(cat "$z/type" 2>/dev/null)" = "$p" ] &&
+                        awk -v m="$(cat "$z/temp" 2>/dev/null)" 'BEGIN{if (m+0>0) printf "%.1f\\n", m/1000}' && exit 0
+                done
+            done
+            echo "-1"
+        `]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const temp = parseFloat(this.text.trim())
+                root.cpuTemperature = (!isNaN(temp) && temp >= 0) ? temp : -1
             }
         }
     }

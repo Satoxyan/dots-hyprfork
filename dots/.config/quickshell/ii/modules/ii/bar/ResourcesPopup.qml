@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
@@ -10,6 +12,12 @@ StyledPopup {
     // Helper function to format KB to GB
     function formatKB(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
+    }
+
+    // Safety truncation for long GPU names
+    function shortenName(name) {
+        const maxLength = 24;
+        return name.length > maxLength ? name.slice(0, maxLength - 1) + "…" : name;
     }
 
     Row {
@@ -87,6 +95,49 @@ StyledPopup {
                     icon: "bolt"
                     label: Translation.tr("Load:")
                     value: `${Math.round(ResourceUsage.cpuUsage * 100)}%`
+                }
+                StyledPopupValueRow {
+                    visible: ResourceUsage.cpuTemperature >= 0
+                    icon: "device_thermostat"
+                    label: Translation.tr("Temperature:")
+                    value: `${Math.round(ResourceUsage.cpuTemperature)}°C`
+                }
+            }
+        }
+
+        Column {
+            visible: GpuInfo.gpus.length > 0
+            anchors.top: parent.top
+            spacing: 8
+
+            StyledPopupHeaderRow {
+                icon: "developer_board"
+                label: "GPU"
+            }
+            Row {
+                spacing: 12
+                Repeater {
+                    model: GpuInfo.gpus
+                    delegate: Column {
+                        required property var modelData
+                        spacing: 4
+
+                        StyledPopupValueRow {
+                            icon: "developer_board"
+                            label: root.shortenName(modelData.name)
+                            value: ""
+                        }
+                        StyledPopupValueRow {
+                            icon: "bolt"
+                            label: Translation.tr("Load:")
+                            value: modelData.load >= 0 ? `${modelData.load}%` : "--"
+                        }
+                        StyledPopupValueRow {
+                            icon: "device_thermostat"
+                            label: Translation.tr("Temperature:")
+                            value: modelData.temperature >= 0 ? `${Math.round(modelData.temperature)}°C` : "--"
+                        }
+                    }
                 }
             }
         }
