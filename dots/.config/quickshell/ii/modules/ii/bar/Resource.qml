@@ -14,6 +14,113 @@ Item {
     implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
     property bool warning: percentage * 100 >= warningThreshold
+    property bool cycleOnScroll: false
+    signal scrollCycled(bool up)
+    signal scrollMidpoint(bool up)
+    property int scrollDirection: 1
+    property bool animateValue: false
+    property double displayValue: root.percentage
+
+    onPercentageChanged: root.displayValue = root.percentage
+
+    Behavior on displayValue {
+        enabled: root.animateValue
+        NumberAnimation {
+            duration: Appearance.animation.elementMove.duration
+            easing.type: Appearance.animation.elementMove.type
+            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+        }
+    }
+
+    function scrollPulse(up) {
+        root.scrollDirection = up ? 1 : -1
+        const shift = Math.max(4, percentageText.implicitHeight * 0.9)
+        const iconShift = Math.max(4, iconContainer.height * 0.7)
+        textSlideOut.to = up ? -shift : shift
+        textSlideIn.from = up ? shift : -shift
+        iconSlideOut.to = up ? -iconShift : iconShift
+        iconSlideIn.from = up ? iconShift : -iconShift
+        cycleScrollAnim.restart()
+    }
+
+    SequentialAnimation {
+        id: cycleScrollAnim
+        ParallelAnimation {
+            NumberAnimation {
+                id: textSlideOut
+                target: textSlide
+                property: "y"
+                from: 0
+                duration: 90
+                easing.type: Easing.InQuad
+            }
+            NumberAnimation {
+                id: textFadeOut
+                target: percentageText
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 90
+                easing.type: Easing.InQuad
+            }
+            NumberAnimation {
+                id: iconSlideOut
+                target: iconSlide
+                property: "y"
+                from: 0
+                duration: 90
+                easing.type: Easing.InQuad
+            }
+            NumberAnimation {
+                id: iconFadeOut
+                target: iconMaterial
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 90
+                easing.type: Easing.InQuad
+            }
+        }
+        ScriptAction {
+            script: root.scrollMidpoint(root.scrollDirection === 1)
+        }
+        ParallelAnimation {
+            NumberAnimation {
+                id: textSlideIn
+                target: textSlide
+                property: "y"
+                to: 0
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                id: textFadeIn
+                target: percentageText
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                id: iconSlideIn
+                target: iconSlide
+                property: "y"
+                to: 0
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                id: iconFadeIn
+                target: iconMaterial
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+        }
+    }
 
     RowLayout {
         id: resourceRowLayout
@@ -27,32 +134,41 @@ Item {
             id: resourceCircProg
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
-            value: percentage
+            value: root.displayValue
             implicitSize: 20
             colPrimary: root.warning ? Appearance.colors.colError : Appearance.colors.colOnSecondaryContainer
             accountForLightBleeding: !root.warning
             enableAnimation: false
 
             Item {
+                id: iconContainer
                 anchors.centerIn: parent
                 width: resourceCircProg.implicitSize
                 height: resourceCircProg.implicitSize
-                
+                clip: true
+
                 MaterialSymbol {
+                    id: iconMaterial
                     anchors.centerIn: parent
                     font.weight: Font.DemiBold
                     fill: 1
                     text: iconName
                     iconSize: Appearance.font.pixelSize.normal
                     color: Appearance.m3colors.m3onSecondaryContainer
+                    transform: Translate {
+                        id: iconSlide
+                        y: 0
+                    }
                 }
             }
         }
 
         Item {
+            id: textContainer
             Layout.alignment: Qt.AlignVCenter
             implicitWidth: fullPercentageTextMetrics.width
             implicitHeight: percentageText.implicitHeight
+            clip: true
 
             TextMetrics {
                 id: fullPercentageTextMetrics
@@ -65,7 +181,11 @@ Item {
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer1
                 font.pixelSize: Appearance.font.pixelSize.small
-                text: `${Math.round(percentage * 100).toString()}`
+                text: `${Math.round(root.percentage * 100).toString()}`
+                transform: Translate {
+                    id: textSlide
+                    y: 0
+                }
             }
         }
 
@@ -80,6 +200,11 @@ Item {
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
         enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
+        onWheel: (wheel) => {
+            if (root.cycleOnScroll) {
+                root.scrollCycled(wheel.angleDelta.y > 0)
+            }
+        }
     }
 
     Behavior on implicitWidth {
