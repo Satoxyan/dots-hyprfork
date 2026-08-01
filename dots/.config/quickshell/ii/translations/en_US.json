@@ -339,6 +339,7 @@
   "Brightness": "Brightness",
   "Unknown": "Unknown",
   "Polling interval (ms)": "Polling interval (ms)",
+  "Show GPU indicator in bar": "Show GPU indicator in bar",
   "Lock": "Lock",
   "Thinking": "Thinking",
   "Approve": "Approve",

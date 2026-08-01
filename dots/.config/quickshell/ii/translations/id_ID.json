@@ -338,6 +338,7 @@
   "Brightness": "Kecerahan",
   "Unknown": "Tidak dikenal",
   "Polling interval (ms)": "Interval polling (ms)",
+  "Show GPU indicator in bar": "Tampilkan indikator GPU di bilah",
   "Lock": "Kunci",
   "Thinking": "Berpikir",
   "Approve": "Setujui",

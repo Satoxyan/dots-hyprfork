@@ -14,8 +14,7 @@ Item {
     implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
     property bool warning: percentage * 100 >= warningThreshold
-    property bool cycleOnScroll: false
-    signal scrollCycled(bool up)
+    readonly property bool hovered: mouseArea.containsMouse
     signal scrollMidpoint(bool up)
     property int scrollDirection: 1
     property bool animateValue: false
@@ -200,11 +199,6 @@ Item {
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
         enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
-        onWheel: (wheel) => {
-            if (root.cycleOnScroll) {
-                root.scrollCycled(wheel.angleDelta.y > 0)
-            }
-        }
     }
 
     Behavior on implicitWidth {

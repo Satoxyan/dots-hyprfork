@@ -8,10 +8,23 @@ MouseArea {
     property bool borderless: Config.options.bar.borderless
     property bool alwaysShowAllResources: false
     property int loadIndex: 0
+    property int ramIndex: 0
     readonly property int loadCount: GpuInfo.gpus.length + 1
+    readonly property bool canCycleLoad: GpuInfo.gpus.length > 0 && !gpuResource.shown
+    readonly property bool canCycleRam: ResourceUsage.swapTotal > 0 && !swapResource.shown
+    readonly property bool noMediaPlaying: MprisController.activePlayer?.trackTitle == null
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
     implicitHeight: Appearance.sizes.barHeight
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
+
+    onWheel: (wheel) => {
+        const up = wheel.angleDelta.y > 0
+        if (ramResource.hovered && root.canCycleRam) {
+            ramResource.scrollPulse(up)
+        } else if (cpuResource.hovered && root.canCycleLoad) {
+            cpuResource.scrollPulse(up)
+        }
+    }
 
     function cycleLoad(up) {
         if (GpuInfo.gpus.length === 0) {
@@ -39,10 +52,35 @@ MouseArea {
         return "developer_board"
     }
 
+    function cycleRam(up) {
+        if (ResourceUsage.swapTotal <= 0) {
+            root.ramIndex = 0
+            return
+        }
+        root.ramIndex = root.ramIndex === 0 ? 1 : 0
+        ramResource.animateValue = true
+        ramAnimationResetTimer.restart()
+    }
+
+    function currentRamLoad() {
+        if (root.ramIndex === 0) return ResourceUsage.memoryUsedPercentage
+        return ResourceUsage.swapUsedPercentage
+    }
+
+    function currentRamIcon() {
+        return root.ramIndex === 0 ? "memory" : "swap_horiz"
+    }
+
     Timer {
         id: cpuAnimationResetTimer
         interval: 500
         onTriggered: cpuResource.animateValue = false
+    }
+
+    Timer {
+        id: ramAnimationResetTimer
+        interval: 500
+        onTriggered: ramResource.animateValue = false
     }
 
     Binding {
@@ -50,6 +88,13 @@ MouseArea {
         property: "loadIndex"
         value: 0
         when: GpuInfo.gpus.length === 0
+    }
+
+    Binding {
+        target: root
+        property: "ramIndex"
+        value: 0
+        when: ResourceUsage.swapTotal <= 0
     }
 
     RowLayout {
@@ -61,16 +106,21 @@ MouseArea {
         anchors.rightMargin: 4
 
         Resource {
-            iconName: "memory"
-            percentage: ResourceUsage.memoryUsedPercentage
+            id: ramResource
+            iconName: root.currentRamIcon()
+            percentage: root.currentRamLoad()
             warningThreshold: Config.options.bar.resources.memoryWarningThreshold
+            onScrollMidpoint: (up) => {
+                root.cycleRam(up)
+            }
         }
 
         Resource {
+            id: swapResource
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
             shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || 
-                (MprisController.activePlayer?.trackTitle == null) ||
+                root.noMediaPlaying ||
                 root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.swapWarningThreshold
@@ -81,17 +131,26 @@ MouseArea {
             iconName: root.currentIcon()
             percentage: root.currentLoad()
             shown: Config.options.bar.resources.alwaysShowCpu || 
-                !(MprisController.activePlayer?.trackTitle?.length > 0) ||
+                root.noMediaPlaying ||
                 root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold
-            cycleOnScroll: GpuInfo.gpus.length > 0
-            onScrollCycled: (up) => {
-                cpuResource.scrollPulse(up)
-            }
             onScrollMidpoint: (up) => {
                 root.cycleLoad(up)
             }
+        }
+
+        Resource {
+            id: gpuResource
+            iconName: "developer_board"
+            percentage: GpuInfo.gpus.length > 0
+                ? (GpuInfo.gpus[0].load >= 0 ? GpuInfo.gpus[0].load / 100 : 0)
+                : 0
+            shown: GpuInfo.gpus.length > 0 &&
+                (Config.options.bar.resources.alwaysShowGpu || root.alwaysShowAllResources) &&
+                root.noMediaPlaying
+            Layout.leftMargin: shown ? 6 : 0
+            warningThreshold: Config.options.bar.resources.cpuWarningThreshold
         }
 
     }
