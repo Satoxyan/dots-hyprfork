@@ -16,6 +16,7 @@ Item {
     property bool warning: percentage * 100 >= warningThreshold
     readonly property bool hovered: mouseArea.containsMouse
     signal scrollMidpoint(bool up)
+    readonly property bool scrolling: cycleScrollAnim.running
     property int scrollDirection: 1
     property bool animateValue: false
     property double displayValue: root.percentage

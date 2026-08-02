@@ -17,11 +17,16 @@ MouseArea {
     implicitHeight: Appearance.sizes.barHeight
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
+    function wheelUp(wheel) {
+        if (wheel.angleDelta.y !== 0) return wheel.angleDelta.y > 0
+        return wheel.pixelDelta.y > 0
+    }
+
     onWheel: (wheel) => {
-        const up = wheel.angleDelta.y > 0
-        if (ramResource.hovered && root.canCycleRam) {
+        const up = root.wheelUp(wheel)
+        if (ramResource.hovered && root.canCycleRam && !ramResource.scrolling) {
             ramResource.scrollPulse(up)
-        } else if (cpuResource.hovered && root.canCycleLoad) {
+        } else if (cpuResource.hovered && root.canCycleLoad && !cpuResource.scrolling) {
             cpuResource.scrollPulse(up)
         }
     }
