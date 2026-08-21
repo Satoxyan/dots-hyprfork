@@ -27,7 +27,9 @@ Options for install:
                             Quickshell, Fish and Hyprland
       --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
       --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
-                            Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
+                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
+      --with-expressive  Also download expressive-pC dots (https://github.com/Satoxyan/expressive-pC)
+                             for use with the dots switcher.
 ${STY_CYAN}
 New features (experimental):
       --exp-files             Use yaml-based config for the third step copying files.
@@ -47,7 +49,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
   -o hfFk:cs \
-  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-hyprland-entry,skip-fontconfig,skip-miscconf,core,exp-files,via-nix \
+  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-hyprland-entry,skip-fontconfig,skip-miscconf,core,exp-files,via-nix,with-expressive-pc \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -90,6 +92,7 @@ while true ; do
     --core) SKIP_PLASMAINTG=true;SKIP_FISH=true;SKIP_FONTCONFIG=true;SKIP_MISCCONF=true;shift;;
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
+    --with-expressive-pc) INSTALL_EXPRESSIVE_PC=true;shift;;
     
     ## Ones with parameter
     --fontset)

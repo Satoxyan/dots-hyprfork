@@ -48,3 +48,30 @@ case $ask in
     printf "${STY_RST}"
     ;;
 esac
+
+case ${INSTALL_EXPRESSIVE_PC} in
+  true) true ;;
+  *)
+    printf "\n"
+    printf "${STY_PURPLE}${STY_BOLD}Optional: expressive-pC dots${STY_RST}\n"
+    printf "${STY_PURPLE}"
+    printf "Download expressive-pC (https://github.com/Satoxyan/expressive-pC)\n"
+    printf "as an alternative dots preset. You can switch between \"ii\" and\n"
+    printf "\"expressive-pC\" using Ctrl+Alt+D.\n"
+    printf "${STY_RST}"
+    case $ask in
+      false) INSTALL_EXPRESSIVE_PC=false ;;
+      *)
+        printf "${STY_BLUE}"
+        printf "  y = Yes, download expressive-pC\n"
+        printf "  n = No, skip. (DEFAULT)\n"
+        read -p "===> [y/N]: " p
+        case $p in
+          [yY]) INSTALL_EXPRESSIVE_PC=true ;;
+          *) INSTALL_EXPRESSIVE_PC=false ;;
+        esac
+        printf "${STY_RST}"
+        ;;
+    esac
+    ;;
+esac

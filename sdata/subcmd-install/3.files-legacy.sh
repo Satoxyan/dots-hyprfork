@@ -27,6 +27,21 @@ case "${SKIP_QUICKSHELL}" in
     ;;
 esac
 
+# expressive-pC dots
+case "${INSTALL_EXPRESSIVE_PC}" in
+  true)
+    EXPRESSIVE_PC_DIR="${XDG_CONFIG_HOME}/quickshell/expressive-pC"
+    if [ -d "${EXPRESSIVE_PC_DIR}/.git" ]; then
+      printf "${STY_BLUE}[$0]: expressive-pC already exists, pulling latest...${STY_RST}\n"
+      v git -C "${EXPRESSIVE_PC_DIR}" pull --ff-only || true
+    else
+      printf "${STY_BLUE}[$0]: Cloning expressive-pC into ${EXPRESSIVE_PC_DIR}...${STY_RST}\n"
+      v git clone https://github.com/Satoxyan/expressive-pC.git "${EXPRESSIVE_PC_DIR}"
+    fi
+    ;;
+  *) true ;;
+esac
+
 case "${SKIP_FISH}" in
   true) true;;
   *)
