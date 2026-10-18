@@ -25,6 +25,10 @@ output_path = '~/.config/gtk-3.0/gtk.css'
 input_path = '~/.config/matugen/templates/gtk-4.0/gtk.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
 
+[templates.millennium]
+input_path = '~/.config/matugen/templates/millennium/material.css'
+output_path = '~/.local/share/Steam/millennium/themes/Material-Theme/css/main/colors/matugen.css'
+
 [templates.kde_colors]
 input_path = '~/.config/matugen/templates/kde/color.txt'
 output_path = '~/.local/state/quickshell/user/generated/color.txt'
