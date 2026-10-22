@@ -1,0 +1,203 @@
+/*
+ * Vesktop (Material Discord + Material You addon) colors generated with Matugen
+ * Matches the Material 3 palette used by Quickshell (colors.json)
+ * The source template is here: ~/.config/matugen/templates/vesktop/quickCss.css
+ */
+
+.theme-dark {
+	--main-color: {{colors.background.dark.hex}};
+	--main-alt: {{colors.surface_container_lowest.dark.hex}};
+	--attachment-color: {{colors.surface.dark.hex}};
+	--message-color: {{colors.surface_container_low.dark.hex}};
+	--message-color-alt: {{colors.surface_container_lowest.dark.hex}};
+	--message-color-hover: {{colors.surface_container.dark.hex}};
+	--sidebar-panel-color: {{colors.surface_container_low.dark.hex}};
+	--status-picker-color: {{colors.surface_container.dark.hex}};
+	--popout-color: {{colors.surface_container_high.dark.hex}};
+	--popout-color-alt: {{colors.surface_container_low.dark.hex}};
+	--main-textarea-color: {{colors.surface_container_high.dark.hex}};
+	--main-textarea-color-alt: {{colors.surface_container_high.dark.hex}};
+	--main-textarea-inner-color: {{colors.surface_container.dark.hex}};
+	--main-textarea-border: {{colors.outline_variant.dark.hex}};
+	--main-textarea-button-color: {{colors.primary.dark.hex}};
+	--input-color: {{colors.surface_container_high.dark.hex}};
+	--input-color-alt: {{colors.surface_container_highest.dark.hex}};
+	--input-border-color: {{colors.outline_variant.dark.hex}};
+	--input-text-color: {{colors.on_surface.dark.hex}};
+	--input-placeholder-color: {{colors.on_surface_variant.dark.hex}};
+	--input-pill-color: {{colors.surface_container_highest.dark.hex}};
+	--menu-item-hover: {{colors.surface_container_high.dark.hex}};
+	--menu-item-select: {{colors.surface_container_highest.dark.hex}};
+	--menu-item-text-color: {{colors.on_surface.dark.hex}};
+	--card-color-filled: {{colors.surface_container.dark.hex}};
+	--card-color-hover: {{colors.surface_container_high.dark.hex}};
+	--card-color-active: {{colors.surface_container_highest.dark.hex}};
+	--card-color-alt: {{colors.surface_container_low.dark.hex}};
+	--card-color-alt-hover: {{colors.surface_container.dark.hex}};
+	--card-border-color: {{colors.outline_variant.dark.hex}};
+	--card-header-text-color: {{colors.on_surface.dark.hex}};
+	--card-button-color: {{colors.surface_container_high.dark.hex}};
+	--card-button-color-hover: {{colors.surface_container_highest.dark.hex}};
+	--tooltip-color: {{colors.inverse_surface.dark.hex}};
+	--tooltip-text-color: {{colors.inverse_on_surface.dark.hex}};
+	--switch-knob-color: {{colors.outline.dark.hex}};
+	--switch-slider-color: {{colors.surface_container_highest.dark.hex}};
+	--switch-slider-checked: {{colors.primary.dark.hex}};
+	--switch-knob-checked: {{colors.on_primary.dark.hex}};
+	--switch-slider-color-modal: {{colors.surface_container_high.dark.hex}};
+	--profile-body-background-color: {{colors.surface_container_low.dark.hex}};
+	--activity-card-color: {{colors.surface_container.dark.hex}};
+	--activity-card-color--hover: {{colors.surface_container_high.dark.hex}};
+	--activity-card-color--active: {{colors.surface_container_highest.dark.hex}};
+	--activity-card-color--inset: {{colors.surface_container_lowest.dark.hex}};
+	--scrollbar-color: {{colors.outline_variant.dark.hex}};
+	--accent-text-color--material-you: {{colors.on_primary.dark.hex}};
+	--accent-secondary-color: {{colors.secondary_container.dark.hex}};
+	--accent-secondary-text-color: {{colors.on_secondary_container.dark.hex}};
+	--alert-text-color: {{colors.on_error.dark.hex}};
+	--success-text-color: {{colors.on_tertiary.dark.hex}};
+	--warning-text-color: {{colors.on_secondary.dark.hex}};
+	--button-link-text-color: {{colors.primary.dark.hex}};
+	--header-primary: {{colors.on_surface.dark.hex}};
+	--header-secondary: {{colors.on_surface_variant.dark.hex}};
+	--text-primary: {{colors.on_surface.dark.hex}};
+	--text-normal: {{colors.on_surface.dark.hex}};
+	--text-strong: {{colors.on_surface.dark.hex}};
+	--text-subtle: {{colors.on_surface_variant.dark.hex}};
+	--text-tertiary: {{colors.outline.dark.hex}};
+	--text-muted: {{colors.on_surface_variant.dark.hex}};
+	--icon-strong: {{colors.on_surface.dark.hex}};
+	--icon-subtle: {{colors.on_surface_variant.dark.hex}};
+	--icon-muted: {{colors.outline.dark.hex}};
+	--icon-tertiary: {{colors.outline.dark.hex}};
+	--channels-default: {{colors.outline.dark.hex}};
+	--channel-icon: {{colors.outline.dark.hex}};
+	--interactive-text-default: {{colors.on_surface_variant.dark.hex}};
+	--interactive-muted: {{colors.outline_variant.dark.hex}};
+	--accent-hsl--material-you: {{colors.primary.dark.hue}}, {{colors.primary.dark.saturation}}%, {{colors.primary.dark.lightness}}%;
+	--accent-hsl: {{colors.primary.dark.hue}}, {{colors.primary.dark.saturation}}%, {{colors.primary.dark.lightness}}%;
+	--alert-hsl: {{colors.error.dark.hue}}, {{colors.error.dark.saturation}}%, {{colors.error.dark.lightness}}%;
+	--success-hsl: {{colors.tertiary.dark.hue}}, {{colors.tertiary.dark.saturation}}%, {{colors.tertiary.dark.lightness}}%;
+	--md-ripple-color: {{colors.primary.dark.hue}}, {{colors.primary.dark.saturation}}%, {{colors.primary.dark.lightness}}%;
+	--button-link-color: {{colors.primary.dark.hue}}, {{colors.primary.dark.saturation}}%, {{colors.primary.dark.lightness}}%;
+	--accent-hue: {{colors.primary.dark.hue}};
+	--accent-saturation: {{colors.primary.dark.saturation}}%;
+	--accent-lightness: {{colors.primary.dark.lightness}}%;
+	--alert-hue: {{colors.error.dark.hue}};
+	--alert-saturation: {{colors.error.dark.saturation}}%;
+	--alert-lightness: {{colors.error.dark.lightness}}%;
+	--success-hue: {{colors.tertiary.dark.hue}};
+	--success-saturation: {{colors.tertiary.dark.saturation}}%;
+	--success-lightness: {{colors.tertiary.dark.lightness}}%;
+	--warning-hue: {{colors.secondary.dark.hue}};
+	--warning-saturation: {{colors.secondary.dark.saturation}}%;
+	--warning-lightness: {{colors.secondary.dark.lightness}}%;
+}
+.theme-dark [class*="numberBadge"],
+.theme-dark [class*="textBadge"][style*="status-danger"] {
+	background-color: {{colors.tertiary.dark.hex}} !important;
+	color: {{colors.on_tertiary.dark.hex}} !important;
+}
+.theme-dark [class*="upperBadge"] [class*="iconBadge"] {
+	background-color: {{colors.secondary.dark.hex}} !important;
+	color: {{colors.on_secondary.dark.hex}} !important;
+}
+
+.theme-light {
+	--main-color: {{colors.background.light.hex}};
+	--main-alt: {{colors.surface_container_lowest.light.hex}};
+	--attachment-color: {{colors.surface.light.hex}};
+	--message-color: {{colors.surface_container_low.light.hex}};
+	--message-color-alt: {{colors.surface_container_lowest.light.hex}};
+	--message-color-hover: {{colors.surface_container.light.hex}};
+	--sidebar-panel-color: {{colors.surface_container_low.light.hex}};
+	--status-picker-color: {{colors.surface_container.light.hex}};
+	--popout-color: {{colors.surface_container_high.light.hex}};
+	--popout-color-alt: {{colors.surface_container_low.light.hex}};
+	--main-textarea-color: {{colors.surface_container_high.light.hex}};
+	--main-textarea-color-alt: {{colors.surface_container_high.light.hex}};
+	--main-textarea-inner-color: {{colors.surface_container.light.hex}};
+	--main-textarea-border: {{colors.outline_variant.light.hex}};
+	--main-textarea-button-color: {{colors.primary.light.hex}};
+	--input-color: {{colors.surface_container_high.light.hex}};
+	--input-color-alt: {{colors.surface_container_highest.light.hex}};
+	--input-border-color: {{colors.outline_variant.light.hex}};
+	--input-text-color: {{colors.on_surface.light.hex}};
+	--input-placeholder-color: {{colors.on_surface_variant.light.hex}};
+	--input-pill-color: {{colors.surface_container_highest.light.hex}};
+	--menu-item-hover: {{colors.surface_container_high.light.hex}};
+	--menu-item-select: {{colors.surface_container_highest.light.hex}};
+	--menu-item-text-color: {{colors.on_surface.light.hex}};
+	--card-color-filled: {{colors.surface_container.light.hex}};
+	--card-color-hover: {{colors.surface_container_high.light.hex}};
+	--card-color-active: {{colors.surface_container_highest.light.hex}};
+	--card-color-alt: {{colors.surface_container_low.light.hex}};
+	--card-color-alt-hover: {{colors.surface_container.light.hex}};
+	--card-border-color: {{colors.outline_variant.light.hex}};
+	--card-header-text-color: {{colors.on_surface.light.hex}};
+	--card-button-color: {{colors.surface_container_high.light.hex}};
+	--card-button-color-hover: {{colors.surface_container_highest.light.hex}};
+	--tooltip-color: {{colors.inverse_surface.light.hex}};
+	--tooltip-text-color: {{colors.inverse_on_surface.light.hex}};
+	--switch-knob-color: {{colors.outline.light.hex}};
+	--switch-slider-color: {{colors.surface_container_highest.light.hex}};
+	--switch-slider-checked: {{colors.primary.light.hex}};
+	--switch-knob-checked: {{colors.on_primary.light.hex}};
+	--switch-slider-color-modal: {{colors.surface_container_high.light.hex}};
+	--profile-body-background-color: {{colors.surface_container_low.light.hex}};
+	--activity-card-color: {{colors.surface_container.light.hex}};
+	--activity-card-color--hover: {{colors.surface_container_high.light.hex}};
+	--activity-card-color--active: {{colors.surface_container_highest.light.hex}};
+	--activity-card-color--inset: {{colors.surface_container_lowest.light.hex}};
+	--scrollbar-color: {{colors.outline_variant.light.hex}};
+	--accent-text-color--material-you: {{colors.on_primary.light.hex}};
+	--accent-secondary-color: {{colors.secondary_container.light.hex}};
+	--accent-secondary-text-color: {{colors.on_secondary_container.light.hex}};
+	--alert-text-color: {{colors.on_error.light.hex}};
+	--success-text-color: {{colors.on_tertiary.light.hex}};
+	--warning-text-color: {{colors.on_secondary.light.hex}};
+	--button-link-text-color: {{colors.primary.light.hex}};
+	--header-primary: {{colors.on_surface.light.hex}};
+	--header-secondary: {{colors.on_surface_variant.light.hex}};
+	--text-primary: {{colors.on_surface.light.hex}};
+	--text-normal: {{colors.on_surface.light.hex}};
+	--text-strong: {{colors.on_surface.light.hex}};
+	--text-subtle: {{colors.on_surface_variant.light.hex}};
+	--text-tertiary: {{colors.outline.light.hex}};
+	--text-muted: {{colors.on_surface_variant.light.hex}};
+	--icon-strong: {{colors.on_surface.light.hex}};
+	--icon-subtle: {{colors.on_surface_variant.light.hex}};
+	--icon-muted: {{colors.outline.light.hex}};
+	--icon-tertiary: {{colors.outline.light.hex}};
+	--channels-default: {{colors.outline.light.hex}};
+	--channel-icon: {{colors.outline.light.hex}};
+	--interactive-text-default: {{colors.on_surface_variant.light.hex}};
+	--interactive-muted: {{colors.outline_variant.light.hex}};
+	--accent-hsl--material-you: {{colors.primary.light.hue}}, {{colors.primary.light.saturation}}%, {{colors.primary.light.lightness}}%;
+	--accent-hsl: {{colors.primary.light.hue}}, {{colors.primary.light.saturation}}%, {{colors.primary.light.lightness}}%;
+	--alert-hsl: {{colors.error.light.hue}}, {{colors.error.light.saturation}}%, {{colors.error.light.lightness}}%;
+	--success-hsl: {{colors.tertiary.light.hue}}, {{colors.tertiary.light.saturation}}%, {{colors.tertiary.light.lightness}}%;
+	--md-ripple-color: {{colors.primary.light.hue}}, {{colors.primary.light.saturation}}%, {{colors.primary.light.lightness}}%;
+	--button-link-color: {{colors.primary.light.hue}}, {{colors.primary.light.saturation}}%, {{colors.primary.light.lightness}}%;
+	--accent-hue: {{colors.primary.light.hue}};
+	--accent-saturation: {{colors.primary.light.saturation}}%;
+	--accent-lightness: {{colors.primary.light.lightness}}%;
+	--alert-hue: {{colors.error.light.hue}};
+	--alert-saturation: {{colors.error.light.saturation}}%;
+	--alert-lightness: {{colors.error.light.lightness}}%;
+	--success-hue: {{colors.tertiary.light.hue}};
+	--success-saturation: {{colors.tertiary.light.saturation}}%;
+	--success-lightness: {{colors.tertiary.light.lightness}}%;
+	--warning-hue: {{colors.secondary.light.hue}};
+	--warning-saturation: {{colors.secondary.light.saturation}}%;
+	--warning-lightness: {{colors.secondary.light.lightness}}%;
+}
+.theme-light [class*="numberBadge"],
+.theme-light [class*="textBadge"][style*="status-danger"] {
+	background-color: {{colors.tertiary.light.hex}} !important;
+	color: {{colors.on_tertiary.light.hex}} !important;
+}
+.theme-light [class*="upperBadge"] [class*="iconBadge"] {
+	background-color: {{colors.secondary.light.hex}} !important;
+	color: {{colors.on_secondary.light.hex}} !important;
+}
