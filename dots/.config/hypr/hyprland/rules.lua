@@ -54,6 +54,7 @@ hl.window_rule({match = {class = "^(org.kde.kdialog)$" },                    cen
 hl.window_rule({match = {class = "^(org.kde.kdialog)$" },                    size = "900 600" })
 hl.window_rule({match = {class = "^(kdialog)$" },                            float = true })
 hl.window_rule({match = {class = "^(kdialog)$" },                            center = true })
+hl.window_rule({match = {class = "^(scrcpy)$" },             float = true})
 
 -- Move
 -- kde-material-you-colors spawns a window when changing dark/light theme. This is to make sure it doesn't interfere at all.
