@@ -1,6 +1,25 @@
 -- Default variables
 -- Copy these to ~/.config/hypr/custom/variables.lua to make changes in a dotfiles-update-friendly manner
 
+do
+    local rawBind = hl.bind
+
+    hl.bind = function(keys, dispatcher, opts)
+        local keybind = rawBind(keys, dispatcher, opts)
+
+        local upper = (keys or ""):upper()
+        local lastKey = upper:match("[^+%s]+$") or ""
+        if upper:find("SUPER") and lastKey ~= "SUPER_L" and lastKey ~= "SUPER_R" then
+            rawBind(keys, hl.dsp.global("quickshell:searchToggleReleaseInterrupt"), {
+                transparent = true,
+                non_consuming = true,
+            })
+        end
+
+        return keybind
+    end
+end
+
 -- The folder within ~/.config/quickshell containing the config
 hl.env("qsConfig", "ii")
 
