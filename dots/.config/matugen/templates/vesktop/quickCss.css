@@ -38,8 +38,8 @@
 	--card-header-text-color: {{colors.on_surface.dark.hex}};
 	--card-button-color: {{colors.surface_container_high.dark.hex}};
 	--card-button-color-hover: {{colors.surface_container_highest.dark.hex}};
-	--tooltip-color: {{colors.inverse_surface.dark.hex}};
-	--tooltip-text-color: {{colors.inverse_on_surface.dark.hex}};
+	--tooltip-color: {{colors.surface_container_lowest.dark.hex}};
+	--tooltip-text-color: {{colors.on_surface.dark.hex}};
 	--switch-knob-color: {{colors.outline.dark.hex}};
 	--switch-slider-color: {{colors.surface_container_highest.dark.hex}};
 	--switch-slider-checked: {{colors.primary.dark.hex}};
@@ -137,8 +137,8 @@
 	--card-header-text-color: {{colors.on_surface.light.hex}};
 	--card-button-color: {{colors.surface_container_high.light.hex}};
 	--card-button-color-hover: {{colors.surface_container_highest.light.hex}};
-	--tooltip-color: {{colors.inverse_surface.light.hex}};
-	--tooltip-text-color: {{colors.inverse_on_surface.light.hex}};
+	--tooltip-color: {{colors.surface_container_lowest.light.hex}};
+	--tooltip-text-color: {{colors.on_surface.light.hex}};
 	--switch-knob-color: {{colors.outline.light.hex}};
 	--switch-slider-color: {{colors.surface_container_highest.light.hex}};
 	--switch-slider-checked: {{colors.primary.light.hex}};
