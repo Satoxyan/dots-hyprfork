@@ -33,6 +33,15 @@ output_path = '~/.local/share/Steam/millennium/themes/Material-Theme/css/main/co
 input_path = '~/.config/matugen/templates/vesktop/quickCss.css'
 output_path = '~/.config/vesktop/settings/quickCss.css'
 
+[templates.btop]
+input_path = '~/.config/matugen/templates/btop/matugen.theme'
+output_path = '~/.config/btop/themes/matugen.theme'
+
+[templates.yapfast]
+input_path = '~/.config/matugen/templates/colors.json'
+output_path = '~/.local/state/quickshell/user/generated/yapfast-colors.json'
+post_hook = '~/.config/quickshell/ii/scripts/colors/sync_yapfast_theme.sh'
+
 [templates.kde_colors]
 input_path = '~/.config/matugen/templates/kde/color.txt'
 output_path = '~/.local/state/quickshell/user/generated/color.txt'
